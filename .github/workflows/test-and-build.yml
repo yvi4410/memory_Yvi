@@ -1,0 +1,31 @@
+name: Test and Build Memory Workflow
+
+on:
+  push:
+    branches:
+      - develop
+
+jobs:
+  test-memory:
+    runs-on: self-hosted
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Test JPEG files
+        run: |
+          for jpg_file in $(find . -name "*.jpg"); do
+            file "$jpg_file"
+          done
+
+  build-memory:
+    runs-on: self-hosted
+    needs: test-memory  
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Build Docker Image
+        run: |
+          docker build -t <username>/memory .
+
