@@ -1,0 +1,26 @@
+jobs:
+  deploy-memory:
+    runs-on: self-hosted
+    needs: push-memory
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Add SSH Key
+        uses: webfactory/ssh-agent@v0.5.3
+        with:
+          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+          
+      - name: Deploy on Remote Server
+        env:
+          DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+          DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+        run: |
+          ssh -o StrictHostKeyChecking=no user@YOUR_SERVER_IP << EOF
+            echo "${DOCKER_PASSWORD}" | docker login -u "${DOCKER_USERNAME}" --password-stdin
+            docker pull $DOCKER_USERNAME/memory:latest
+            docker stop memory-site || true
+            docker rm memory-site || true
+            docker run -d --name memory-site -p 80:80 $DOCKER_USERNAME/memory:latest
+          EOF
+
