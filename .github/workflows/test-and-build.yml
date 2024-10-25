@@ -27,5 +27,5 @@ jobs:
 
       - name: Build Docker Image
         run: |
-          docker build -t <username>/memory .
+          docker build -t yvi4410/memory .
 
