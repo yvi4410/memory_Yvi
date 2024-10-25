@@ -1,5 +1,7 @@
 FROM nginx:latest
 
+RUN apt-get update && apt-get install -y file 
+
 RUN mkdir -p /var/concentration/html
 
 COPY html/ /var/concentration/html/
