@@ -1,0 +1,27 @@
+name: Test Memory Workflow
+
+# Déclenche le workflow sur chaque push sur la branche 'develop'
+on:
+  push:
+    branches:
+      - develop
+
+# Configuration des jobs du workflow
+jobs:
+  test-memory:
+    # Le job s'exécute sur un runner self-hosted
+    runs-on: self-hosted
+
+    # Étapes du job
+    steps:
+      # Vérifie le dépôt sur le runner
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      # Exécute la commande 'file' sur chaque fichier .jpg
+      - name: Test JPEG files
+        run: |
+          for jpg_file in $(find . -name "*.jpg"); do
+            file "$jpg_file"
+          done
+
