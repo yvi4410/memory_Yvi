@@ -1,0 +1,17 @@
+name: Build Docker Image
+
+on:
+  push:
+    branches:
+      - develop
+
+jobs:
+  build-memory:
+    runs-on: self-hosted
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Build Docker Image
+        run: docker build -t memory-site .
+
